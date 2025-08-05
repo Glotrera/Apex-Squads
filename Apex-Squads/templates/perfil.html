@@ -17,3 +17,19 @@
             <div class="profile-header">
                 <h2>{{ player.global.name }}</h2>
                 <span class>Platform: {{ player.global.platform }}</span>
+            </div>
+            <div class="profile-stats">
+                <div class="stats-card">
+                    <h3>Level</h3>
+                    <p>{{ player.global.level }}</p>
+                </div>
+                <div class="stats-card">
+                    <h3>Rank</h3>
+                    {% if player.global.rank %}
+                        <p>{{ player.global.rank.rankName }} 
+                        <img src="{{ player.global.rank.rankImg }}" alt="Rank Icon" class="rank-icon">
+                    {% else %}
+                        <p>Unranked</p>
+                    {% endif %}
+                </div>
+                <div class="stats-card">
