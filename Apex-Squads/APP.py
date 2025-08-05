@@ -128,6 +128,37 @@ def login():
     Verifica as credenciais e armazena o utilizador na sessão.
     """
     
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+   
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        if password != confirm_password:
+            return render_template('register.html', error='Passwords do not match.')
+        
+        db = get_db()
+        cursor = db.cursor()
+        try:
+            cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
+            db.commit()
+            
+            user = db.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+            session['user'] = {'id': user['id'], 'username': user['username']}
+            return redirect(url_for('home'))
+        except sqlite3.IntegrityError:
+            return render_template('register.html', error='Username already exists.')
+
+    return render_template('register.html')
+
+    """
+    Rota para o registo de novos utilizadores.
+    Verifica se o utilizador já existe e armazena o novo utilizador na base de dados.
+    Se o registo for bem-sucedido, armazena o utilizador na sessão.
+    """
+    
 @app.route('/logout')
 def logout():
     session.pop('user', None)
