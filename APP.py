@@ -108,5 +108,18 @@ def logout():
     Remove o utilizador da sessão.
     """
     
+@app.route('/perfil', methods=['POST'])
+def search_profile():
+    player_name = request.form['player_name']
+    platform = request.form['platform']
+    return redirect(url_for('show_profile', player_name=player_name, platform=platform))
+    
+    """
+    Rota para pesquisar o perfil de um jogador.
+    Redireciona para a rota de exibição do perfil
+    """
+    
+
+    
 
         
