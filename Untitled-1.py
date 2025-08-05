@@ -105,4 +105,15 @@ def login():
     Rota para o login do utilizador.
     Verifica as credenciais e armazena o utilizador na sessão.
     """
+    
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('home'))
+    """
+    Rota para o logout do utilizador.
+    Remove o utilizador da sessão.
+    """
+    
+
         
