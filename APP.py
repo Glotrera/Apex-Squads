@@ -137,5 +137,19 @@ def show_profile(platform, player_name):
     Exibe o perfil de um jogador específico.
     Faz a chamada à API para obter os dados do jogador.
     """
+    
+@app.route('/wishlist')
+def wishlist():
+    if not session.get('user'):
+        return redirect(url_for('login'))
+    
+    user_id = session['user']['id']
+    db = get_db()
+    items = db.execute('SELECT item_id FROM wishlist WHERE user_id = ?', (user_id,)).fetchall()
+    
+    return render_template('wishlist.html', items=items, user=session.get('user'))
 
-        
+    """
+    Rota para a wishlist do utilizador.
+    """
+    
