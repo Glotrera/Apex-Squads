@@ -153,3 +153,23 @@ def wishlist():
     Rota para a wishlist do utilizador.
     """
     
+@app.route('/add_to_wishlist' , methods=['POST'])
+def add_to_wishlist():
+    if not session.get('user'):
+        return redirect(url_for('login'))
+    
+    user_id = session['user']['id']
+    item_id = request.form.get('item_id')
+    
+    db = get_db()
+    cursor = db.cursor()
+    try:
+        cursor.execute('INSERT INTO wishlist (user_id, item_id) VALUES (?, ?)', (user_id, item_id))
+        db.commit()
+    except sqlite3.IntegrityError:
+        print(f"Item {item_id} já está na wishlist.")
+        
+    """
+    Adiciona um item à wishlist do utilizador.
+    """
+
