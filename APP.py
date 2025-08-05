@@ -173,3 +173,23 @@ def add_to_wishlist():
     Adiciona um item à wishlist do utilizador.
     """
 
+@app.route('/remove_from_wishlist', methods=['POST'])
+def remove_from_wishlist():
+    
+    if not session.get('user'):
+        return redirect(url_for('login'))
+    
+    user_id = session['user']['id']
+    item_id = request.form.get('item_id')
+    
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute('DELETE FROM wishlist WHERE user_id = ? AND item_id = ?', (user_id, item_id))
+    db.commit()
+    
+    return redirect(url_for('wishlist'))
+
+    """
+    Remove um item da wishlist do utilizador.
+    """
+
