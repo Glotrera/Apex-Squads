@@ -119,7 +119,23 @@ def search_profile():
     Redireciona para a rota de exibição do perfil
     """
     
+@app.route('/perfil/<string:player_name>/<string:platform>')
+def show_profile(platform, player_name):
+    api_url = f"https://api.mozambiquehe.re/bridge?auth=YOUR_API_KEY&player=PLAYER_NAME&platform=PLATFORM"
+    headers = {"Authorization": app.config['API_KEY']}
+    player_data = None
+    try:
+        response = requests.get(api_url, headers=headers)
+        response.raise_for_status()
+        player_data = response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Erro ao buscar dados do jogador: {e}")
+        
+    return render_template('profile.html', player_data=player_data, user=session.get('user'))
 
-    
+    """
+    Exibe o perfil de um jogador específico.
+    Faz a chamada à API para obter os dados do jogador.
+    """
 
         
