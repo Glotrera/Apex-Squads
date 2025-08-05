@@ -150,22 +150,25 @@ def search_profile():
     
 @app.route('/perfil/<string:player_name>/<string:platform>')
 def show_profile(platform, player_name):
-    api_url = f"https://api.mozambiquehe.re/bridge?auth=YOUR_API_KEY&player=PLAYER_NAME&platform=PLATFORM"
-    headers = {"Authorization": app.config['API_KEY']}
+    
+    api_url = f"https://api.mozambiquehe.re/bridge?auth={app.config['API_KEY']}&player={player_name}&platform={platform}"
+    
     player_data = None
+    most_played_legend_image = None
     try:
         response = requests.get(api_url, headers=headers)
         response.raise_for_status()
         player_data = response.json()
         
-        if player_data and 'legends' in player_data and 'most_played' in player_data['legends']:
-            legend_name = player_data['legends']['most_played']['name']
-            most_played_legend_image = f"https://placehold.co/1920x1080/2c3e50/ffffff?text={legend_name}"
+        if 'legends' in player_data and 'selected' in player_data['legends'] and 'legend_name' in player_data['legends']['selected']:
+            legend_name = player_data['legends']['selected']['legend_name'].lower()
+            
+            most_played_legend_image = legend_images.get(legend_name, "https://placehold.co/1920x1080/2c3e50/ffffff?text=Lenda+Desconhecida")
     
     except requests.exceptions.RequestException as e:
         print(f"Erro ao buscar dados do jogador: {e}")
         
-    return render_template('profile.html', player_data=player_data, user=session.get('user'))
+    return render_template('profile.html', player=player_data, user=session.get('user'), legend_image=most_played_legend_image)
 
     """
     Exibe o perfil de um jogador específico.
