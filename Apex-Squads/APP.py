@@ -10,6 +10,33 @@ app.secret_key = 'chave_secret_key'
 app.vonfig['DATABASE'] = 'apex_status.db'
 app.config['API_KEY'] = 'sua_chave_api_aqui'
 
+legend_images = {
+    "wraith": "https://i.imgur.com/gK9f3eZ.jpg",
+    "mirage": "https://i.imgur.com/u7y1d6y.jpg",
+    "bangalore": "https://i.imgur.com/o3V4Q8O.jpg",
+    "gibraltar": "https://i.imgur.com/lM5zD8z.jpg",
+    "lifeline": "https://i.imgur.com/Pq3h9z0.jpg",
+    "pathfinder": "https://i.imgur.com/V2hV5L7.jpg",
+    "caustic": "https://i.imgur.com/e2t6Z1X.jpg",
+    "octane": "https://i.imgur.com/h5d8s0G.jpg",
+    "wattson": "https://i.imgur.com/c6f5v7h.jpg",
+    "crypto": "https://i.imgur.com/x0R4z2b.jpg",
+    "revenant": "https://i.imgur.com/rXf1Sj0.jpg",
+    "loba": "https://i.imgur.com/q1Fz4nS.jpg",
+    "rampart": "https://i.imgur.com/J3t1y2B.jpg",
+    "horizon": "https://i.imgur.com/FwF71g2.jpg",
+    "fuse": "https://i.imgur.com/5E8v7wF.jpg",
+    "valkyrie": "https://i.imgur.com/3q1tE1K.jpg",
+    "seer": "https://i.imgur.com/zH3J8iN.jpg",
+    "ash": "https://i.imgur.com/y4c9C1h.jpg",
+    "mad maggie": "https://i.imgur.com/k91d8V5.jpg",
+    "newcastle": "https://i.imgur.com/gD0o4eW.jpg",
+    "vantage": "https://i.imgur.com/n6t1u8b.jpg",
+    "catalyst": "https://i.imgur.com/lR6y9gG.jpg",
+    "ballistic": "https://i.imgur.com/m2y4m2n.jpg",
+    "conduit": "https://i.imgur.com/p5t7a8F.jpg"
+}
+
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
@@ -128,6 +155,11 @@ def show_profile(platform, player_name):
         response = requests.get(api_url, headers=headers)
         response.raise_for_status()
         player_data = response.json()
+        
+        if player_data and 'legends' in player_data and 'most_played' in player_data['legends']:
+            legend_name = player_data['legends']['most_played']['name']
+            most_played_legend_image = f"https://placehold.co/1920x1080/2c3e50/ffffff?text={legend_name}"
+    
     except requests.exceptions.RequestException as e:
         print(f"Erro ao buscar dados do jogador: {e}")
         
