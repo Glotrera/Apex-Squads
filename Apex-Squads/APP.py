@@ -156,7 +156,7 @@ def show_profile(platform, player_name):
     player_data = None
     most_played_legend_image = None
     try:
-        response = requests.get(api_url, headers=headers)
+        response = requests.get(api_url)
         response.raise_for_status()
         player_data = response.json()
         
