@@ -1,0 +1,12 @@
+{% extends "base.thml"  %}
+
+{% block title %}Apex Squads - Home{% endblock %}
+
+{% block content %}
+    <h1>Welcome to Apex Squads!</h1>
+    <p>Use the serach bar to find players and view their profiles.</p>
+    <form action="{{ url_for('search_profile') }}" method="post" class="search-form">
+        <label for="player_name">Player Name:</label>
+        <input type="text" id="player_name" name="player_name" required>
+        <label for="platform">Platform:</label>
+        <select id="platform" name="platform" required>
