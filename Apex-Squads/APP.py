@@ -69,13 +69,7 @@ def init_db():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT NOT NULL UNIQUE,
                 password TEXT NOT NULL
-            );
-            CREATE TABLE IF NOT EXISTS wishlist (
-                user_id INTEGER NOT NULL,
-                item_id TEXT NOT NULL,
-                PRIMARY KEY (user_id, item_id),
-                FOREIGN KEY (user_id) REFERENCES users (id)
-            ); 
+            );      
         ''')
         
         try:
@@ -87,7 +81,7 @@ def init_db():
     """
     Inicializa a base de dados com as tabelas necessárias
     """
-
+    
 @app.cli.command('initdb')
 def initdb_command():
     """
@@ -101,6 +95,7 @@ def initdb_command():
 @app.route('/')
 def home():
     return render_template('home.html', user=session.get('user'))
+    
     """
     Rota para a página principal, com um formulário de pesquisa.
     """
@@ -206,61 +201,6 @@ def show_profile(platform, player_name):
     Faz a chamada à API para obter os dados do jogador.
     """
     
-@app.route('/wishlist')
-def wishlist():
-    if not session.get('user'):
-        return redirect(url_for('login'))
-    
-    user_id = session['user']['id']
-    db = get_db()
-    items = db.execute('SELECT item_id FROM wishlist WHERE user_id = ?', (user_id,)).fetchall()
-    
-    return render_template('wishlist.html', items=items, user=session.get('user'))
-
-    """
-    Rota para a wishlist do utilizador.
-    """
-    
-@app.route('/add_to_wishlist' , methods=['POST'])
-def add_to_wishlist():
-    if not session.get('user'):
-        return redirect(url_for('login'))
-    
-    user_id = session['user']['id']
-    item_id = request.form.get('item_id')
-    
-    db = get_db()
-    cursor = db.cursor()
-    try:
-        cursor.execute('INSERT INTO wishlist (user_id, item_id) VALUES (?, ?)', (user_id, item_id))
-        db.commit()
-    except sqlite3.IntegrityError:
-        print(f"Item {item_id} já está na wishlist.")
-        
-    """
-    Adiciona um item à wishlist do utilizador.
-    """
-
-@app.route('/remove_from_wishlist', methods=['POST'])
-def remove_from_wishlist():
-    
-    if not session.get('user'):
-        return redirect(url_for('login'))
-    
-    user_id = session['user']['id']
-    item_id = request.form.get('item_id')
-    
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute('DELETE FROM wishlist WHERE user_id = ? AND item_id = ?', (user_id, item_id))
-    db.commit()
-    
-    return redirect(url_for('wishlist'))
-
-    """
-    Remove um item da wishlist do utilizador.
-    """
-
 @app.route('/discord_links')
 def discord_links():
     
