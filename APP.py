@@ -193,3 +193,18 @@ def remove_from_wishlist():
     Remove um item da wishlist do utilizador.
     """
 
+@route('/discord_links')
+def discord_links():
+    
+    discord_servers = [
+        {'name': 'Apex Legends', 'url': 'https://discord.com/servers/apex-legends-541484311354933258'},
+        {'name': 'Apex Legends FR', 'url': 'https://discord.com/servers/apex-legends-fr-463019891658588180'},
+        {'name': 'Apex Legends Brasil', 'url': 'https://discord.com/servers/apex-legends-brasil-542501711860727848'},
+        {'name': 'Battlecord | Apex', 'url': 'https://discord.com/servers/battlecord-apex-633157361074176000'},
+    ]
+    return render_template('discord_links.html', servers=discord_servers, user=session.get('user'))
+
+    """
+    Rota para exibir links de servidores do Discord relacionados ao Apex Legends.
+    """
+    
