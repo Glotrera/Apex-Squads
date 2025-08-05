@@ -193,7 +193,7 @@ def remove_from_wishlist():
     Remove um item da wishlist do utilizador.
     """
 
-@route('/discord_links')
+@app.route('/discord_links')
 def discord_links():
     
     discord_servers = [
