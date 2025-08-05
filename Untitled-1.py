@@ -1,3 +1,5 @@
+""" Ficheiro principal do Flask para o projeto Apex Squads """
+
 import os
 import sqlite3
 import requests
@@ -15,9 +17,18 @@ def get_db():
         db.row_factory = sqlite3.Row
     return db
 
+    """
+    Cria uma conexão com a base de dados SQL
+    """
+
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
         
+    """
+    Fecha a conexão com a base de dados no final da requisição
+    """
+        
+def init_db():
