@@ -32,3 +32,37 @@ def close_connection(exception):
     """
         
 def init_db():
+    with app.app_context():
+        db = get_db()
+        cursor = db.cursor()
+        cursor.executescript('''
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL UNIQUE,
+                password TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS wishlist (
+                user_id INTEGER NOT NULL,
+                item_id TEXT NOT NULL,
+                PRIMARY KEY (user_id, item_id),
+                FOREIGN KEY (user_id) REFERENCES users (id)
+            );
+            CREATE TABLE IF NOT EXISTS friends (
+                user_id INTEGER NOT NULL,
+                friend_id INTEGER NOT NULL,
+                PRIMARY KEY (user_id, friend_id),
+                FOREIGN KEY (user_id) REFERENCES users (id),
+                FOREIGN KEY (friend_id) REFERENCES users (id)
+            );
+        ''')
+        
+        try:
+            cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", ('testuser', 'password'))
+            db.commit()
+        except sqlite3.IntegrityError:
+            print("Utilizador 'testuser' já existe.")
+        print("Base de dados inicializada e tabelas criadas.")
+    """
+    Inicializa a base de dados com as tabelas necessárias
+    """
+    
