@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Links Discord{% endblock %}
+
+{% block content %}
+    <h2>Servidores Discord da Comunidade</h2>
+    {% if servers %}
+        <ul class="discord-list">
+            {% for server in servers %}
+                <li>
+                    <a href="{{ server.url }}" target="_blank" rel="noopener noreferrer">
+                        {{ server.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Não há links de servidores Discord disponíveis.</p>
+    {% endif %}
+{% endblock %}
