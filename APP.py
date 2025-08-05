@@ -208,3 +208,8 @@ def discord_links():
     Rota para exibir links de servidores do Discord relacionados ao Apex Legends.
     """
     
+if __name__ == '__main__':
+    app.run(debug=True)
+    """
+    Executa a aplicação Flask.
+    """
