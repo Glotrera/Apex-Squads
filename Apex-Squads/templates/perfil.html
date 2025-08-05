@@ -86,3 +86,28 @@
                     <p>{{ player.total.teammates_respawned }}</p>
                 </div>
             </div>
+            
+            <div class="legend-stats-section">
+                <h2>Legend Statistics</h2>
+                <div class="legend-cards">
+                    {% for legend in player.legends.all %}
+                        <div class="legend-card">
+                            <h3>{{ legend.legend_name }}</h3>
+                            {% if legend.data %}
+                                {% for stat in legend.data %}
+                                    <p><strong>{{ stat.name }}:</strong> {{ stat.value }}</p>
+                                {% endfor %}
+                            {% else %}
+                                <p>No specific statistics found for this legend.</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+    {% else %}
+        <div class="error-container">
+            <h2>Player not found or an error occurred.</h2>
+            <p>Please check the player name and platform and try again.</p>
+        </div>
+    {% endif %}
+{% endblock %}
