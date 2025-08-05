@@ -33,3 +33,18 @@
                     {% endif %}
                 </div>
                 <div class="stats-card">
+                    <h3>Most Played Legend</h3>
+                    {% if player.legends.selected %}
+                        <p>{{ player.legends.selected.legend_name }}</p>
+                    {% else %}
+                        <p>No legend data available</p>
+                    {% endif %}
+                </div>
+
+                <div class="stats-card">
+                    <h3>Total Games Played</h3>
+                    <p>{{ player.total.games_played }}</p>
+                </div>
+                <div class="stats-card">
+                    <h3>Total Kills</h3>
+                    <p>{{ player.total.kills }}</p>
