@@ -65,4 +65,44 @@ def init_db():
     """
     Inicializa a base de dados com as tabelas necessárias
     """
-    
+
+@app.cli.command('initdb')
+def initdb_command():
+    """
+    Inicializa a base de dados.
+    """
+    init_db()
+    print('Base de dados inicializada.')
+        
+# --- Rotas da Aplicação ---
+
+@app.route('/')
+def home():
+    return render_template('home.html', user=session.get('user'))
+    """
+    Rota para a página principal, com um formulário de pesquisa.
+    """
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        db = get_db()
+        user = db.execute(
+            'SELECT * FROM users WHERE username = ? AND password = ?',
+            (username, password)
+        ).fetchone()
+        
+        if user:
+            session['user'] = {'id': user['id'], 'username': user['username']}
+            return redirect(url_for('home'))
+        else:
+            return render_template('login.html', error='Credenciais inválidas.')
+        
+    return render_template('login.html')
+
+    """
+    Rota para o login do utilizador.
+    Verifica as credenciais e armazena o utilizador na sessão.
+    """
+        
