@@ -6,14 +6,12 @@ import requests
 from flask import Flask, render_template, request, redirect, url_for, g, session
 from dotenv import load_dotenv
 
-def configure_app():
-    load_dotenv()  # Carrega as variáveis de ambiente do arquivo .env
-    app.config['API_KEY'] = os.getenv('api_key')  # Obtém a chave da API do ambiente
-
 app = Flask(__name__)
 app.secret_key = 'chave_secret_key'
 app.config['DATABASE'] = 'apex_status.db'
-app.config['API_KEY'] = 'sua_chave_api_aqui'
+
+load_dotenv()
+app.config['API_KEY'] = os.getenv('APEX_API_KEY') 
 
 legend_images = {
     "wraith": "https://static.wikia.nocookie.net/apexlegends_gamepedia_en/images/a/a4/Wraith.jpg",
@@ -77,11 +75,6 @@ def init_db():
             );      
         ''')
         
-        try:
-            cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", ('testuser', 'password'))
-            db.commit()
-        except sqlite3.IntegrityError:
-            print("Utilizador 'testuser' já existe.")
         print("Base de dados inicializada e tabelas criadas.")
     """
     Inicializa a base de dados com as tabelas necessárias
@@ -180,7 +173,7 @@ def search_profile():
     """
     
 @app.route('/perfil/<string:player_name>/<string:platform>')
-def show_profile(platform, player_name):
+def show_profile(player_name, platform):
     
     api_url = f"https://api.mozambiquehe.re/bridge?auth={app.config['API_KEY']}&player={player_name}&platform={platform}"
     
@@ -222,6 +215,7 @@ def discord_links():
     """
     
 if __name__ == '__main__':
+    init_db()
     app.run(debug=True)
     """
     Executa a aplicação Flask.
