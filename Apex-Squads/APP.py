@@ -12,7 +12,7 @@ def configure_app():
 
 app = Flask(__name__)
 app.secret_key = 'chave_secret_key'
-app.vonfig['DATABASE'] = 'apex_status.db'
+app.config['DATABASE'] = 'apex_status.db'
 app.config['API_KEY'] = 'sua_chave_api_aqui'
 
 legend_images = {
