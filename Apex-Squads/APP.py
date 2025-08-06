@@ -4,6 +4,11 @@ import os
 import sqlite3
 import requests
 from flask import Flask, render_template, request, redirect, url_for, g, session
+from dotenv import load_dotenv
+
+def configure_app():
+    load_dotenv()  # Carrega as variáveis de ambiente do arquivo .env
+    app.config['API_KEY'] = os.getenv('api_key')  # Obtém a chave da API do ambiente
 
 app = Flask(__name__)
 app.secret_key = 'chave_secret_key'
