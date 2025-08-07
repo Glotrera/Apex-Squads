@@ -4,110 +4,113 @@
 
 {% block content %}
     {% if player %}
-        <style>
-            body {
-                background-image: url("{{ legend_image }}");
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                color: white;
-            }
-        </style>
-        <div class="profile-container">
-            <div class="profile-header">
-                <h2>{{ player.global.name }}</h2>
-                <span class>Platform: {{ player.global.platform }}</span>
-            </div>
-            <div class="profile-stats">
-                <div class="stats-card">
-                    <h3>Level</h3>
-                    <p>{{ player.global.level }}</p>
+        <div class="profile-container" style="background-image: url('{{ legend_image }}');">
+            <div class="profile-overlay"> 
+                <div class="profile-header">
+                    <h2>{{ player.global.name }}</h2>
+                    <span class="platform">Platform: {{ player.global.platform }}</span>
                 </div>
-                <div class="stats-card">
-                    <h3>Rank</h3>
-                    {% if player.global.rank %}
-                        <p>{{ player.global.rank.rankName }} 
-                        <img src="{{ player.global.rank.rankImg }}" alt="Rank Icon" class="rank-icon">
-                    {% else %}
-                        <p>Unranked</p>
-                    {% endif %}
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <h3>Level</h3>
+                        <p>{{ player.global.level | default('N/A') }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Rank</h3>
+                        {% if player.global.rank %}
+                            <p>{{ player.global.rank.rankName | default('N/A') }}</p> 
+                            <img src="{{ player.global.rank.rankImg | default('') }}" alt="Rank Icon" class="rank-icon">
+                        {% else %}
+                            <p>Unranked</p>
+                        {% endif %}
+                    </div>
+                    <div class="stat-card">
+                        <h3>Most Played Legend</h3>
+                        {% if player.legends.selected %}
+                            <p>{{ player.legends.selected.legend_name | default('N/A') }}</p>
+                        {% else %}
+                            <p>No legend data available</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Total Games Played</h3>
+                        <p>{{ player.total.games_played | default('N/A') }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Wins</h3>
+                        <p>{{ player.total.wins | default('N/A') }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Kills</h3>
+                        <p>{{ player.total.kills | default('N/A') }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Damage</h3>
+                        <p>{{ player.total.damage | default('N/A') }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Average Damage per Match</h3> 
+                        <p>{{ player.total.damage_per_match | default('N/A') }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Highest Damage in a Single Match</h3>
+                        <p>{{ player.total.highest_damage | default('N/A') }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Highest Kills in a Single Match</h3>
+                        <p>{{ player.total.highest_kills | default('N/A') }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Knockdowns</h3>
+                        <p>{{ player.total.knockdowns | default('N/A') }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Assists</h3> 
+                        <p>{{ player.total.assists | default('N/A') }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Teammates Revived</h3> 
+                        <p>{{ player.total.teammates_revived | default('N/A') }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Teammates Respawns</h3> 
+                        <p>{{ player.total.teammates_respawned | default('N/A') }}</p>
+                    </div>
                 </div>
-                <div class="stats-card">
-                    <h3>Most Played Legend</h3>
-                    {% if player.legends.selected %}
-                        <p>{{ player.legends.selected.legend_name }}</p>
-                    {% else %}
-                        <p>No legend data available</p>
-                    {% endif %}
+                
+                <div class="legend-stats-section">
+                    <h2>Legend Statistics</h2> 
+                    <div class="legend-cards">
+                        {% for legend in player.legends.all %}
+                            <div class="legend-card">
+                                <h3>{{ legend.legend_name | default('N/A') }}</h3>
+                                {% if legend.data %}
+                                    {% for stat in legend.data %}
+                                        <p><strong>{{ stat.name | default('N/A') }}:</strong> {{ stat.value | default('N/A') }}</p>
+                                    {% endfor %}
+                                {% else %}
+                                    <p>No specific statistics found for this legend.</p> 
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
 
-                <div class="stats-card">
-                    <h3>Total Games Played</h3>
-                    <p>{{ player.total.games_played }}</p>
-                </div>
-                <div class="stats-card">
-                    <h3>Total Wins</h3>
-                    <p>{{ player.total.wins }}</p>
-                </div>
-                <div class="stats-card">
-                    <h3>Total Kills</h3>
-                    <p>{{ player.total.kills }}</p>
-                </div>
-                <div class="stats-card">
-                    <h3>Total Damage</h3>
-                    <p>{{ player.total.damage }}</p>
-                </div>
-                <div class="stats-card">
-                    <h3>Average Damage</h3>
-                    <p>{{ player.total.damage_per_match }}</p>
-                </div>
-                <div class="stats-card">
-                    <h3>Highest Damage in a Single Match</h3>
-                    <p>{{ player.total.highest_damage }}</p>
-                </div>
-                <div class="stats-card">
-                    <h3>Highest Kills in a Single Match</h3>
-                    <p>{{ player.total.highest_kills }}</p>
-                </div>
-                <div class="stats-card">
-                    <h3>Total knockdowns</h3>
-                    <p>{{ player.total.knockdowns }}</p>
-                </div>
-                <div class="stats-card">
-                    <h3>Total assists</h3>
-                    <p>{{ player.total.assists }}</p>
-                </div>
-                <div class="stats-card">
-                    <h3>Teammates revived</h3>
-                    <p>{{ player.total.teammates_revives }}</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Teammates Respawns</h3>
-                    <p>{{ player.total.teammates_respawned }}</p>
-                </div>
-            </div>
-            
-            <div class="legend-stats-section">
-                <h2>Legend Statistics</h2>
-                <div class="legend-cards">
-                    {% for legend in player.legends.all %}
-                        <div class="legend-card">
-                            <h3>{{ legend.legend_name }}</h3>
-                            {% if legend.data %}
-                                {% for stat in legend.data %}
-                                    <p><strong>{{ stat.name }}:</strong> {{ stat.value }}</p>
-                                {% endfor %}
-                            {% else %}
-                                <p>No specific statistics found for this legend.</p>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
+                
+                {% if session.user %}
+                    <form action="{{ url_for('add_to_wishlist') }}" method="post" class="wishlist-form">
+                        <input type="hidden" name="item_id" value="{{ player.global.name | default('') }}">
+                        <button type="submit">Add to Wishlist</button> 
+                    </form>
+                {% endif %}
+            </div> 
+        </div> 
     {% else %}
         <div class="error-container">
-            <h2>Player not found or an error occurred.</h2>
-            <p>Please check the player name and platform and try again.</p>
+            <h2>Player not found or an error occurred.</h2> 
+            <p>Please check the player name and platform and try again.</p> 
+            <p>Please ensure your API key is correctly configured.</p> 
         </div>
     {% endif %}
 {% endblock %}
